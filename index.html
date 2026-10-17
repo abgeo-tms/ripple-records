@@ -102,12 +102,12 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 900; text-transform: up
 .slide { grid-area: 1 / 1; position: relative; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility .6s; }
 .slide.on { opacity: 1; visibility: visible; }
 .slide .wrap { position: relative; z-index: 2; padding-block: clamp(84px, 11vw, 150px) clamp(84px, 9vw, 120px); }
-.slide .txt { max-width: 760px; }
+.slide .txt { max-width: 780px; }
 .kick { color: var(--red); display: block; margin-bottom: 18px; }
-.slide h1 { font-size: clamp(64px, 11.5vw, 170px); }
+.slide h1 { font-size: clamp(38px, 6vw, 88px); line-height: .95; }
 .slide .by { margin-top: 18px; font-size: 19px; color: var(--mute); max-width: 44ch; }
 .slide .btn { margin-top: 28px; }
-.art { position: absolute; z-index: 1; top: 50%; right: clamp(16px, 7vw, 120px); width: min(44vw, 520px); aspect-ratio: 1 / 1; transform: translateY(-50%); border-radius: 50%; background: repeating-radial-gradient(circle at 50% 50%, var(--a) 0 14px, var(--b) 14px 28px); border: 1.5px solid var(--line-strong); }
+.art { position: absolute; z-index: 1; top: 50%; right: clamp(16px, 7vw, 120px); width: min(36vw, 460px); aspect-ratio: 1 / 1; transform: translateY(-50%); border-radius: 50%; background: repeating-radial-gradient(circle at 50% 50%, var(--a) 0 14px, var(--b) 14px 28px); border: 1.5px solid var(--line-strong); }
 .art::after { content: ""; position: absolute; inset: 41%; border-radius: 50%; background: var(--fg); }
 .art::before { content: ""; position: absolute; inset: 48.6%; border-radius: 50%; background: var(--bg); z-index: 1; }
 .ctrl { position: absolute; z-index: 4; left: 0; right: 0; bottom: 22px; }
@@ -192,6 +192,7 @@ a.item:hover .go { color: var(--red); }
 .qj { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); }
 .qj a { display: block; padding: 28px 22px; font-family: var(--f-display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 5vw, 64px); line-height: .95; text-decoration: none; border-right: 1px solid var(--line); }
 .qj a:last-child { border-right: 0; }
+.qj a { min-width: 0; overflow-wrap: anywhere; }
 .qj a:hover { background: var(--red); color: var(--on-red); }
 .qj a small { display: block; font-family: var(--f-mono); font-weight: 400; font-size: 12px; letter-spacing: .14em; margin-bottom: 18px; color: var(--mute); }
 .qj a:hover small { color: var(--on-red); }
@@ -240,6 +241,7 @@ footer { padding-block: clamp(36px, 5vw, 64px) 30px; }
 .fbase { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--mute); }
 
 /* ---------- responsive ---------- */
+@media (max-width: 1200px) { .art { opacity: .45; } }
 @media (max-width: 900px) {
   .cols { grid-template-columns: minmax(0, 1fr); }
   .mailing .grid2 { grid-template-columns: minmax(0, 1fr); }
@@ -250,6 +252,8 @@ footer { padding-block: clamp(36px, 5vw, 64px) 30px; }
   .art { width: min(78vw, 420px); right: -22%; opacity: .5; }
 }
 @media (max-width: 620px) {
+  .art { opacity: .28; }
+  .qj a { font-size: 28px; padding: 22px 14px; }
   body { font-size: 16px; }
   .brand-word { height: 32px; }
   .brand-mark { width: 23px; height: 36px; }
@@ -310,7 +314,7 @@ body{margin:0}
       <ul class="biglist">
         <li><a href="#news">News</a></li>
         <li><a href="#about">About</a></li>
-        <li><button type="button" id="open-artists">Artists <span class="go">6 artists &rarr;</span></button></li>
+        <li id="artists-li"></li>
         <li><a href="#releases">Releases</a></li>
         <li><a href="#videos">Videos</a></li>
         <li><a href="#events">Events</a></li>
@@ -323,7 +327,7 @@ body{margin:0}
       <ul class="biglist sm" id="artist-links"></ul>
     </div>
     <div class="ov-foot mono">
-      <a href="#contact">Contact</a><a href="#licensing">Licensing</a><a href="#privacy">Privacy</a>
+      <a href="#contact">Contact</a><a href="#licensing">Licensing</a><a href="#privacy">Privacy</a><a href="https://www.instagram.com/ripplerecords.music" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.tiktok.com/@ripplerecords.music" target="_blank" rel="noopener noreferrer">TikTok</a><a href="https://youtube.com/@ripplerecordsmusic" target="_blank" rel="noopener noreferrer">YouTube</a>
     </div>
   </div>
 </div>
@@ -361,57 +365,32 @@ body{margin:0}
   function fmt(iso) { var p = pt(iso); return MONTHS[p.m - 1] + ' ' + two(p.d) + ', ' + p.y; }
   function dow(iso) { var p = pt(iso); return DAYS[new Date(p.y, p.m - 1, p.d).getDay()]; }
 
-  /* ---------- sample content (replace with real content) ---------- */
-  var ARTISTS = [
-    { id: 'nimi-roe', name: 'Nimi Roe', genre: 'Afro', cv: 0, line: 'Slow-burn Afro songs built on live percussion.', bio: ['Nimi Roe writes slow-burn Afro songs built on live percussion and layered vocals. The records sit between late-night warmth and open-air dancing.', 'Latest release: Slow Tide.'] },
-    { id: 'ade-sola', name: 'Adé Sola', genre: 'Afro', cv: 3, line: 'Guitar-led Afro fusion with a storyteller’s ear.', bio: ['Adé Sola builds Afro fusion around bright guitar lines and patient arrangements. Every song starts with a small story.', 'Latest release: Golden Hour Letters.'] },
-    { id: 'tunde-voss', name: 'Tunde Voss', genre: 'Rap', cv: 1, line: 'Storytelling over boom bap drums.', bio: ['Tunde Voss raps in clear, detailed pictures. His EPs read like short films over dusty boom bap drums.', 'Latest release: Ink and Concrete.'] },
-    { id: 'magna', name: 'Magna', genre: 'Rap', cv: 5, line: 'Fast flows and sharp punchlines.', bio: ['Magna is known for quick flows, tight rhyme schemes and a stage presence that fills a room.', 'Latest release: Loud Quiet.'] },
-    { id: 'zeal', name: 'Zeal', genre: 'Trap', cv: 2, line: 'Dark melodies over heavy low end.', bio: ['Zeal pairs dark melodies with heavy 808s. The sound is built for big speakers and late nights.', 'Latest release: 808 Sunrise.'] },
-    { id: 'k-lock', name: 'K-Lock', genre: 'Trap', cv: 4, line: 'Hard-hitting club trap.', bio: ['K-Lock makes club trap with a hard edge and a hook in every verse.', 'Latest release: Night Shift.'] }
-  ];
-  var RELEASES = [
-    { id: 'slow-tide', title: 'Slow Tide', artist: 'nimi-roe', type: 'Single', date: '2026-10-09', genre: 'Afro', beat: 'afro', bpm: 108, cv: 0, tracks: ['Slow Tide'], blurb: 'A warm, unhurried Afro single built on live percussion and stacked vocals.' },
-    { id: 'ink-and-concrete', title: 'Ink and Concrete', artist: 'tunde-voss', type: 'EP', date: '2026-09-25', genre: 'Rap', beat: 'rap', bpm: 90, cv: 1, tracks: ['Paper Trail', 'Concrete Garden', 'Ink', 'Back Room', 'Long Way Home'], blurb: 'Five songs of sharp storytelling over dusty drums.' },
-    { id: '808-sunrise', title: '808 Sunrise', artist: 'zeal', type: 'Single', date: '2026-09-11', genre: 'Trap', beat: 'trap', bpm: 140, cv: 2, tracks: ['808 Sunrise'], blurb: 'Heavy low end and a melody that lingers after the beat drops.' },
-    { id: 'golden-hour-letters', title: 'Golden Hour Letters', artist: 'ade-sola', type: 'Album', date: '2026-08-28', genre: 'Afro', beat: 'afro2', bpm: 102, cv: 3, tracks: ['First Light', 'Letter One', 'Palm Wine Sky', 'Slow Dance', 'Letter Two', 'Harmattan', 'Golden Hour', 'Last Letter'], blurb: 'A full-length Afro fusion record written as a series of letters.' },
-    { id: 'loud-quiet', title: 'Loud Quiet', artist: 'magna', type: 'Single', date: '2026-08-14', genre: 'Rap', beat: 'rap', bpm: 94, cv: 5, tracks: ['Loud Quiet'], blurb: 'Fast flows and a hook you will repeat all day.' },
-    { id: 'night-shift', title: 'Night Shift', artist: 'k-lock', type: 'EP', date: '2026-07-31', genre: 'Trap', beat: 'trap', bpm: 142, cv: 4, tracks: ['Clock In', 'Night Shift', 'Overtime', 'Clock Out'], blurb: 'Four club-ready trap records for the late hours.' },
-    { id: 'harbour-lights', title: 'Harbour Lights', artist: 'nimi-roe', type: 'Single', date: '2026-07-17', genre: 'Afro', beat: 'afro', bpm: 110, cv: 2, tracks: ['Harbour Lights'], blurb: 'A breezy Afro single for evenings by the water.' }
-  ];
-  var VIDEOS = [
-    { id: 'slow-tide-video', title: 'Slow Tide (Official Video)', artist: 'nimi-roe', date: '2026-10-09', cv: 0, blurb: 'The official video for Slow Tide.' },
-    { id: 'ink-and-concrete-cypher', title: 'Ink and Concrete Cypher', artist: 'tunde-voss', date: '2026-09-28', cv: 1, blurb: 'A live cypher recorded around the Ink and Concrete EP.' },
-    { id: '808-sunrise-visualizer', title: '808 Sunrise (Visualizer)', artist: 'zeal', date: '2026-09-11', cv: 2, blurb: 'A visualizer for the single 808 Sunrise.' },
-    { id: 'golden-hour-session', title: 'Golden Hour Studio Session', artist: 'ade-sola', date: '2026-09-02', cv: 3, blurb: 'A stripped studio session from the Golden Hour Letters album.' },
-    { id: 'magna-freestyle', title: 'Magna Freestyle Session', artist: 'magna', date: '2026-08-20', cv: 5, blurb: 'One take, one beat, no edits.' },
-    { id: 'night-shift-live', title: 'Night Shift (Live)', artist: 'k-lock', date: '2026-08-06', cv: 4, blurb: 'K-Lock performs Night Shift live.' }
-  ];
+  /* ---------- content (edit here) ---------- */
+  /* Artists, releases, videos and events are empty for now: the site shows "none yet" pages.
+     To add one later, put an entry inside the brackets. Example artist:
+     { id: 'artist-name', name: 'Artist Name', genre: 'Trap', cv: 0, line: 'One-line description.', bio: ['First paragraph.'] }
+     Example release:
+     { id: 'song-title', title: 'Song Title', artist: 'artist-name', type: 'Single', date: '2026-11-01', genre: 'Trap', beat: 'trap', bpm: 140, cv: 0, tracks: ['Song Title'], blurb: 'Short description.' }
+     Example event:
+     { date: '2026-12-04', city: 'Lagos', venue: 'Venue name', title: 'Event title', artists: ['artist-name'] } */
+  var ARTISTS = [];
+  var RELEASES = [];
+  var VIDEOS = [];
+  var EVENTS = [];
   var NEWS = [
-    { id: 'first-label-tour', title: 'Ripple Records announces its first label tour', date: '2026-10-12', excerpt: 'Three Ripple Nights are coming this winter, bringing Afro, rap and trap from the full roster to the stage.', body: ['Ripple Records is taking the roster on the road. The first label tour, Ripple Night, starts in Lagos on November 6, then moves to Ibadan on November 21 and Abuja on December 4, with an Accra show to follow on December 19.', 'Each night mixes all three sounds on one bill: Afro, rap and trap. Tickets will be announced here first, so join the mailing list to hear before anyone else.'] },
-    { id: 'slow-tide-out-now', title: 'Nimi Roe’s Slow Tide is out now', date: '2026-10-09', excerpt: 'The new single is out on all platforms, with the official video live on the Videos page.', body: ['Slow Tide, the new single from Nimi Roe, is out now. It is a slow Afro record built on live percussion and layered vocals.', 'The official video is live on the Videos page.'] },
-    { id: 'open-submissions', title: 'Open submissions: send us your demo', date: '2026-10-02', excerpt: 'We are listening to Afro, rap and trap demos. Here is how to send yours.', body: ['Ripple Records is open to demos in Afro, rap and trap. Send two or three of your best finished tracks as links, plus your name, your city and where we can hear more.', 'Use the demos address on the Contact page. We listen to everything we receive.'] },
-    { id: 'ink-and-concrete-ep', title: 'Ink and Concrete EP lands September 25', date: '2026-09-22', excerpt: 'Tunde Voss delivers five songs of storytelling rap over dusty drums.', body: ['Tunde Voss releases the Ink and Concrete EP on September 25. Five songs, one connected story, all built on boom bap drums.', 'The cypher video recorded around the project is on the Videos page.'] },
-    { id: 'inside-the-studio-with-zeal', title: 'Inside the studio with Zeal', date: '2026-09-08', excerpt: 'A look at how the heavy low end of 808 Sunrise came together.', body: ['Before 808 Sunrise came out, Zeal spent weeks tuning the low end until it felt right on both club speakers and phone speakers.', 'The result is a trap single with weight and melody in equal measure.'] }
+    { id: 'abraham-george-to-be-signed', tag: 'Label news', title: 'Ripple Records Founder, Abraham George to be signed to label', date: '2026-10-17', excerpt: 'Ripple Records has announced that its founder, Abraham George, is set to be signed to the label.', body: ['Ripple Records has announced that its founder, Abraham George, is set to be signed to the label.', 'More details will be shared here soon. Join the mailing list to hear first.'] },
+    { id: 'damin-jo-to-be-signed', tag: 'Signing news', title: 'Ripple Records to sign Damin Jo following release of his new single, “Calling”', date: '2026-10-17', excerpt: 'The label is set to sign Damin Jo after the release of his new single, “Calling”.', body: ['Ripple Records is set to sign Damin Jo following the release of his new single, “Calling”.', 'More details will be shared here soon. Join the mailing list to hear first.'] },
+    { id: 'christword-to-be-signed', tag: 'Signing news · Trap', title: 'Ripple Records to sign Trap artist, Christword', date: '2026-10-17', excerpt: 'The label is set to sign the Trap artist Christword.', body: ['Ripple Records is set to sign the Trap artist Christword.', 'More details will be shared here soon. Join the mailing list to hear first.'] }
   ];
-  var EVENTS = [
-    { date: '2026-11-06', city: 'Lagos', venue: 'Yard 9', title: 'Ripple Night: Lagos', artists: ['nimi-roe', 'zeal', 'tunde-voss'] },
-    { date: '2026-11-21', city: 'Ibadan', venue: 'Open Air Deck', title: 'Ripple Night: Ibadan', artists: ['tunde-voss', 'magna', 'ade-sola'] },
-    { date: '2026-12-04', city: 'Abuja', venue: 'Main Hall', title: 'Ripple Night: Abuja', artists: ['nimi-roe', 'k-lock', 'zeal'] },
-    { date: '2026-12-19', city: 'Accra', venue: 'Harbour Stage', title: 'Ripple Night: Accra', artists: ['ade-sola', 'magna', 'k-lock'] }
-  ];
-  var SLIDES = [
-    { kick: 'New single · Afro', title: 'Slow Tide', by: 'Nimi Roe', btn: 'Listen now', href: '#release-slow-tide', a: '#EC1F26', b: '#0A0A0A' },
-    { kick: 'New EP · Rap', title: 'Ink and Concrete', by: 'Tunde Voss', btn: 'Listen now', href: '#release-ink-and-concrete', a: '#F4F3EF', b: '#0A0A0A' },
-    { kick: 'Live · This winter', title: 'Ripple Night', by: 'Lagos, Ibadan, Abuja and Accra', btn: 'Get dates', href: '#events', a: '#EC1F26', b: '#F4F3EF' },
-    { kick: 'Open submissions', title: 'Got a record?', by: 'We are listening to Afro, rap and trap demos.', btn: 'Send a demo', href: '#contact', a: '#2a2a28', b: '#EC1F26' }
-  ];
-  var DEPTS = [
-    { n: 'General', t: 'Questions about the label.', e: 'hello@ripplerecords.com' },
-    { n: 'Demos', t: 'Send two or three finished tracks as links.', e: 'demos@ripplerecords.com' },
-    { n: 'Booking', t: 'Shows, festivals and private events.', e: 'booking@ripplerecords.com' },
-    { n: 'Press', t: 'Interviews, features and press assets.', e: 'press@ripplerecords.com' },
-    { n: 'Licensing', t: 'Sync and music licensing requests.', e: 'licensing@ripplerecords.com' }
+  /* The banner at the top of the home page slides through the news items above. */
+  var PALETTE = [['#EC1F26', '#0A0A0A'], ['#F4F3EF', '#0A0A0A'], ['#2a2a28', '#EC1F26']];
+  var SLIDES = NEWS.map(function (n, i) {
+    return { kick: n.tag, title: n.title, by: 'Ripple Records · ' + fmt(n.date), btn: 'Read more', href: '#news-' + n.id, a: PALETTE[i % 3][0], b: PALETTE[i % 3][1] };
+  });
+  var SOCIAL = [
+    { n: 'Instagram', h: '@ripplerecords.music', u: 'https://www.instagram.com/ripplerecords.music' },
+    { n: 'TikTok', h: '@ripplerecords.music', u: 'https://www.tiktok.com/@ripplerecords.music' },
+    { n: 'YouTube', h: '@ripplerecordsmusic', u: 'https://youtube.com/@ripplerecordsmusic' }
   ];
 
   function artist(id) { return ARTISTS.filter(function (a) { return a.id === id; })[0]; }
@@ -454,9 +433,9 @@ body{margin:0}
     return '<div class="hero" id="hero"><canvas id="ripples" aria-hidden="true"></canvas><div class="slogan"><div class="wrap"><span class="mono">Every record starts a ripple</span></div></div><div class="slides">' + slides + '</div><div class="ctrl"><div class="wrap"><div class="dots">' + dots + '</div><div class="arrows"><button type="button" data-prev aria-label="Previous slide">&larr;</button><button type="button" data-next aria-label="Next slide">&rarr;</button></div></div></div></div>' +
       '<section class="sec feat"><div class="wrap"><span class="mono" style="color:var(--red)">Featured</span><h2 class="big"><a href="#news-' + f.id + '">' + esc(f.title) + '</a></h2><p class="lede">' + esc(f.excerpt) + '</p><p class="meta mono">By Ripple Team · ' + esc(fmt(f.date)) + '</p><a class="btn red" href="#news-' + f.id + '">Read more</a></div></section>' +
       '<section class="sec"><div class="wrap">' + sech('Latest news', '#news', 'All news') + '<div class="list">' + NEWS.slice(1).map(newsRow).join('') + '</div></div></section>' +
-      '<section class="sec"><div class="wrap">' + sech('Calendar', '#events', 'All events') + '<div class="list">' + EVENTS.map(eventRow).join('') + '</div></div></section>' +
-      '<section class="sec"><div class="wrap">' + sech('Latest videos', '#videos', 'All videos') + '<div class="vgrid">' + VIDEOS.slice(0, 4).map(videoTile).join('') + '</div></div></section>' +
-      '<section class="sec"><div class="wrap">' + sech('Latest releases', '#releases', 'All releases') + '<div class="list">' + RELEASES.map(relRow).join('') + '</div></div></section>' +
+      '<section class="sec"><div class="wrap">' + sech('Calendar', '#events', 'All events') + (EVENTS.length ? '<div class="list">' + EVENTS.map(eventRow).join('') + '</div>' : '<p class="empty">No events announced yet.</p>') + '</div></section>' +
+      '<section class="sec"><div class="wrap">' + sech('Latest videos', '#videos', 'All videos') + (VIDEOS.length ? '<div class="vgrid">' + VIDEOS.slice(0, 4).map(videoTile).join('') + '</div>' : '<p class="empty">No videos yet.</p>') + '</div></section>' +
+      '<section class="sec"><div class="wrap">' + sech('Latest releases', '#releases', 'All releases') + (RELEASES.length ? '<div class="list">' + RELEASES.map(relRow).join('') + '</div>' : '<p class="empty">No releases yet.</p>') + '</div></section>' +
       mailing() +
       '<section class="sec" style="border-bottom:0"><div class="wrap"><div class="qj"><a href="#news"><small>Jump to</small>News</a><a href="#releases"><small>Jump to</small>Releases</a><a href="#videos"><small>Jump to</small>Videos</a><a href="#events"><small>Jump to</small>Events</a></div></div></section>';
   }
@@ -478,6 +457,7 @@ body{margin:0}
       '<div class="pillars"><div><h3>Afro</h3><p>Warm drums, live percussion and melody that travels.</p></div><div><h3>Rap</h3><p>Bars first. Stories, flows and punchlines with weight.</p></div><div><h3>Trap</h3><p>Heavy low end, dark melodies and big-room energy.</p></div></div></div>';
   }
   function pArtists() {
+    if (!ARTISTS.length) return pEmpty('Artists', 'Artists', 'No artists are signed yet.', 'Join the mailing list to hear when the first artists are announced.');
     return head('Artists', 'Artists', 'The Ripple Records roster.') + '<div class="wrap page"><div class="agrid">' + ARTISTS.map(artistTile).join('') + '</div></div>';
   }
   function pArtist(id) {
@@ -492,6 +472,7 @@ body{margin:0}
       '<h2 class="sub-h">Shows</h2><div class="list">' + (evs.map(eventRow).join('') || '<p class="empty">No shows announced.</p>') + '</div></div>';
   }
   function pReleases() {
+    if (!RELEASES.length) return pEmpty('Releases', 'Releases', 'No releases yet.', 'Join the mailing list to hear about the first Ripple Records release.');
     return head('Releases', 'Releases', 'Every record on the label, newest first.') + '<div class="wrap page"><div class="list">' + RELEASES.map(relRow).join('') + '</div><p class="mono mute" style="margin-top:26px;max-width:70ch;line-height:1.7">Play buttons run a short beat sketch in the genre and tempo of each release. Full tracks will play here once they are added.</p></div>';
   }
   function pRelease(id) {
@@ -503,6 +484,7 @@ body{margin:0}
       (more.length ? '<h2 class="sub-h">More from ' + esc(aname(r.artist)) + '</h2><div class="list">' + more.map(relRow).join('') + '</div>' : '') + '</div>';
   }
   function pVideos() {
+    if (!VIDEOS.length) return pEmpty('Videos', 'Videos', 'No videos yet.', 'Join the mailing list to hear when the first video is out.');
     return head('Videos', 'Videos', 'Official videos, sessions and live sets.') + '<div class="wrap page"><div class="vgrid">' + VIDEOS.map(videoTile).join('') + '</div></div>';
   }
   function pVideo(id) {
@@ -512,21 +494,25 @@ body{margin:0}
       '<div class="wrap page"><div class="player">' + thumbBg(v.cv, 'opacity:.8') + '<div class="msg"><span class="tag">Video coming soon</span><p class="mute" style="margin-top:10px">The video player will appear here once the file is added.</p></div></div><div class="prose" style="margin-top:26px"><p>' + esc(v.blurb) + '</p></div><h2 class="sub-h">More videos</h2><div class="vgrid">' + more.map(videoTile).join('') + '</div></div>';
   }
   function pEvents() {
+    if (!EVENTS.length) return pEmpty('Events', 'Events', 'No events announced yet.', 'Join the mailing list to hear first when show dates are announced.');
     return head('Events', 'Events', 'Upcoming shows. Tickets will be announced here first.') + '<div class="wrap page"><div class="list">' + EVENTS.map(eventRow).join('') + '</div></div>';
   }
   function pContact() {
-    return head('Contact', 'Contact', 'Pick the right door and we will get it to the right person.') + '<div class="wrap page"><div style="border-top:1px solid var(--line)">' + DEPTS.map(function (d) {
-      return '<div class="dept"><h3>' + esc(d.n) + '</h3><div><code>' + esc(d.e) + '</code><p>' + esc(d.t) + '</p></div><button class="btn sm" type="button" data-copy="' + esc(d.e) + '">Copy</button></div>';
-    }).join('') + '</div><p class="fmsg mono" id="copymsg" role="status"></p></div>';
+    return head('Contact', 'Contact', 'Find Ripple Records on social media.') + '<div class="wrap page"><div style="border-top:1px solid var(--line)">' + SOCIAL.map(function (x) {
+      return '<div class="dept"><h3>' + esc(x.n) + '</h3><div><code>' + esc(x.h) + '</code></div><a class="btn sm" href="' + x.u + '" target="_blank" rel="noopener noreferrer">Open</a></div>';
+    }).join('') + '</div></div>';
   }
   function pLicensing() {
-    return head('Licensing', 'Licensing', 'Use Ripple Records music in film, TV, ads and games.') + '<div class="wrap page"><div class="prose"><p>Send us the project, the territory, the length of use and the songs you are interested in. We will reply with next steps.</p><p>Licensing address: <strong>licensing@ripplerecords.com</strong></p><button class="btn red" type="button" data-copy="licensing@ripplerecords.com">Copy address</button><p class="fmsg mono" id="copymsg" role="status" style="margin-top:12px"></p></div></div>';
+    return head('Licensing', 'Licensing', 'Use Ripple Records music in film, TV, ads and games.') + '<div class="wrap page"><div class="prose"><p>Send us the project, the territory, the length of use and the songs you are interested in. We will reply with next steps.</p><p>For now, send licensing requests as a message on Instagram.</p><a class="btn red" href="' + SOCIAL[0].u + '" target="_blank" rel="noopener noreferrer">Message on Instagram</a></div></div>';
   }
   function pPrivacy() {
-    return head('Privacy', 'Privacy', 'How this site handles information.') + '<div class="wrap page"><div class="prose"><p>This site does not set tracking cookies and does not store the email address entered in the mailing list form. When sign-ups are connected, this page will explain what is collected and why.</p><p>Questions about privacy can go to hello@ripplerecords.com.</p></div></div>';
+    return head('Privacy', 'Privacy', 'How this site handles information.') + '<div class="wrap page"><div class="prose"><p>This site does not set tracking cookies and does not store the email address entered in the mailing list form. When sign-ups are connected, this page will explain what is collected and why.</p></div></div>';
+  }
+  function pEmpty(crumb, title, lede, msg) {
+    return head(crumb, title, lede) + '<div class="wrap page"><div class="prose"><p>' + esc(msg) + '</p></div></div>' + mailing();
   }
   function pShop() {
-    return head('Shop', 'Shop', 'Official merch is on the way.') + '<div class="wrap page"><div class="prose"><p>The Ripple Records store is not open yet. Join the mailing list to hear when it launches.</p></div></div>' + mailing();
+    return pEmpty('Shop', 'Shop', 'Official merch is on the way.', 'The Ripple Records store is not open yet. Join the mailing list to hear when it launches.');
   }
   var lastQuery = '';
   function pSearch() {
@@ -548,7 +534,7 @@ body{margin:0}
     return '<div class="wrap" style="border-top:1px solid var(--line);padding-top:clamp(30px,4vw,52px)"><div class="fgrid"><div><a class="brand" href="#home" aria-label="Ripple Records home"><span class="brand-mark" role="img" aria-label="Ripple Records R logo"></span><span class="brand-word" role="img" aria-label="Ripple Records"></span></a><p class="mute" style="margin-top:16px;max-width:30ch">Every record starts a ripple.</p></div>' +
       '<div><h4>Quick jump</h4><ul><li><a href="#news">News</a></li><li><a href="#releases">Releases</a></li><li><a href="#videos">Videos</a></li><li><a href="#events">Events</a></li></ul></div>' +
       '<div><h4>Ripple Records</h4><ul><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li><li><a href="#licensing">Licensing requests</a></li><li><a href="#privacy">Privacy policy</a></li></ul></div>' +
-      '<div><h4>Connect</h4><ul><li class="soon">Instagram<em>Soon</em></li><li class="soon">YouTube<em>Soon</em></li><li class="soon">Facebook<em>Soon</em></li></ul></div></div>' +
+      '<div><h4>Connect</h4><ul>' + SOCIAL.map(function (x) { return '<li><a href="' + x.u + '" target="_blank" rel="noopener noreferrer">' + esc(x.n) + '</a></li>'; }).join('') + '</ul></div></div>' +
       '<div class="fbase mono"><span>&copy; 2026 Ripple Records. All rights reserved.</span><a href="#home">Back to top</a></div></div>';
   }
 
@@ -598,8 +584,11 @@ body{margin:0}
   $('#artist-links').innerHTML = ARTISTS.map(function (a) { return '<li><a href="#artist-' + a.id + '">' + esc(a.name) + ' <span class="go">Go to artist &rarr;</span></a></li>'; }).join('') + '<li><a href="#artists">All artists <span class="go">&rarr;</span></a></li>';
   $('#btn-menu').addEventListener('click', function () { openOv(menu); });
   $('#btn-search').addEventListener('click', function () { openOv(srch); });
-  $('#open-artists').addEventListener('click', function () { $('#menu-main').hidden = true; $('#menu-artists').hidden = false; $('#back-main').focus(); });
-  $('#back-main').addEventListener('click', function () { showMain(); $('#open-artists').focus(); });
+  var ali = $('#artists-li');
+  ali.innerHTML = ARTISTS.length ? '<button type="button" id="open-artists">Artists <span class="go">' + ARTISTS.length + ' artists &rarr;</span></button>' : '<a href="#artists">Artists</a>';
+  var oa = $('#open-artists');
+  if (oa) oa.addEventListener('click', function () { $('#menu-main').hidden = true; $('#menu-artists').hidden = false; $('#back-main').focus(); });
+  $('#back-main').addEventListener('click', function () { showMain(); var o2 = $('#open-artists'); if (o2) o2.focus(); });
   $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { closeOv(); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeOv(); });
   [menu, srch].forEach(function (ov) {
